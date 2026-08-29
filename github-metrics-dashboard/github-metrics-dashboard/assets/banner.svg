@@ -1,0 +1,36 @@
+<svg width="1000" height="140" viewBox="0 0 1000 140" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="edge" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#39ff9c"/>
+      <stop offset="50%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#b388ff"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#131a24" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect x="1" y="1" width="998" height="138" rx="14" fill="#080b10"/>
+  <rect x="1" y="1" width="998" height="138" rx="14" fill="url(#grid)" opacity="0.6"/>
+  <rect x="1.5" y="1.5" width="997" height="137" rx="14" fill="none" stroke="url(#edge)" stroke-width="1.6" filter="url(#glow)"/>
+
+  <circle cx="34" cy="34" r="4" fill="#39ff9c" filter="url(#glow)"/>
+  <circle cx="50" cy="34" r="4" fill="#00e5ff" filter="url(#glow)"/>
+  <circle cx="66" cy="34" r="4" fill="#b388ff" filter="url(#glow)"/>
+
+  <text x="32" y="80" font-family="'JetBrains Mono','Fira Code',Consolas,monospace" font-size="30" fill="#e8f6ff" font-weight="700" filter="url(#glow)">
+    GITHUB METRICS <tspan fill="#39ff9c">//</tspan> DASHBOARD
+  </text>
+  <text x="32" y="108" font-family="'JetBrains Mono','Fira Code',Consolas,monospace" font-size="13" fill="#7d8a9c" letter-spacing="2">
+    AUTO-SYNCED PROFILE TELEMETRY · DAILY VIA GITHUB ACTIONS
+  </text>
+
+  <text x="968" y="34" text-anchor="end" font-family="monospace" font-size="11" fill="#39ff9c">● SYNCED</text>
+</svg>
