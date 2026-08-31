@@ -169,7 +169,7 @@ jobs:
       # 8) COMMIT GENERATED STATS CARDS
       # ===============================================================
 
-      - name: Commit generated stats cards
+            - name: Commit generated stats cards
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -178,6 +178,8 @@ jobs:
           git add dashboard-top-languages.svg
 
           git commit -m "Update GitHub stats cards" || exit 0
-          git push
 
+          git pull --rebase origin main
+
+          git push origin main
         
