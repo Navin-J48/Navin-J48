@@ -12,9 +12,15 @@ h1, h2, h3, h4 {
  color: #39ff9c !important;
  letter-spacing: 0.5px;
 }
-a { color: #00e5ff !important; }
-small, .text-small, .color-fg-muted { color: #7d8a9c !important; }
-svg { background-color: #0a0e14 !important; }</style>
+a {
+ color: #00e5ff !important;
+}
+small, .text-small, .color-fg-muted {
+ color: #7d8a9c !important;
+}
+svg {
+ background-color: #0a0e14 !important;
+}</style>
     <foreignObject x="0" y="0" width="100%" height="100%">
         <div xmlns="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" class="items-wrapper">
             <section>
