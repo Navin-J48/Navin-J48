@@ -1,36 +1,22 @@
 name: Metrics
 
 on:
-  # Regenerates the dashboard automatically every day
   schedule:
     - cron: "0 3 * * *"
-  # Lets you trigger a manual refresh from the Actions tab (for testing)
+
   workflow_dispatch:
-  # Regenerates whenever you push to your profile repo
+
   push:
     branches: ["main"]
 
-# SECURITY NOTE
-# `token` (secrets.METRICS_TOKEN) is only ever used to READ public GitHub
-# data via the API. Committing the generated SVGs back to this repo is done
-# with `committer_token`, which is set to the workflow's own auto-issued
-# `github.token`. That built-in token is scoped to this single repository
-# and only needs `contents: write` (granted below) -- METRICS_TOKEN itself
-# needs NO write access and NO `repo` scope. See .github/SETUP.md.
 permissions:
   contents: write
 
 jobs:
   dashboard:
     runs-on: ubuntu-latest
+
     env:
-      # Shared "neon dashboard" theme layered on top of every panel below.
-      # These target stable, documented HTML tags rendered by every
-      # lowlighter/metrics template (body, headings, links, svg background),
-      # so they won't break between plugin updates. Restyling a specific
-      # inner element (e.g. individual calendar cells) requires inspecting
-      # that plugin's generated markup for its own class names -- see
-      # .github/SETUP.md, "Going further with theming".
       NEON_CSS: |
         :root { color-scheme: dark; }
         body {
@@ -41,15 +27,56 @@ jobs:
           color: #39ff9c !important;
           letter-spacing: 0.5px;
         }
-        a { color: #00e5ff !important; }
-        small, .text-small, .color-fg-muted { color: #7d8a9c !important; }
-        svg { background-color: #0a0e14 !important; }
+        a {
+          color: #00e5ff !important;
+        }
+        small, .text-small, .color-fg-muted {
+          color: #7d8a9c !important;
+        }
+        svg {
+          background-color: #0a0e14 !important;
+        }
 
     steps:
-      # ---------------------------------------------------------------
-      # 1) Profile header + account-level stats (repos, followers, etc.)
-      #    -> feeds the RIGHT COLUMN "Account overview"
-      # ---------------------------------------------------------------
+
+      # ===============================================================
+      # CHECKOUT
+      # ===============================================================
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+      # ===============================================================
+      # 1) ACCOUNT OVERVIEW
+      # ===============================================================
+
+      - name: Generate account overview stats
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: username=Navin-J48&show_icons=true&hide_border=true&theme=dark&bg_color=0a0e14&title_color=39ff9c&icon_color=00e5ff&text_color=c9d1d9&hide=contribs
+          path: dashboard-account.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+
+      # ===============================================================
+      # 2) TOP LANGUAGES
+      # ===============================================================
+
+      - name: Generate top languages stats
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: username=Navin-J48&layout=compact&hide_border=true&theme=dark&bg_color=0a0e14&title_color=39ff9c&text_color=c9d1d9
+          path: dashboard-top-languages.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+
+      # ===============================================================
+      # 3) PROFILE HEADER + ACTIVITY
+      # ===============================================================
+
       - name: Generate header + activity panel
         uses: lowlighter/metrics@latest
         with:
@@ -62,10 +89,11 @@ jobs:
           config_timezone: ${{ vars.METRICS_TIMEZONE || 'Asia/Kolkata' }}
           extras_css: ${{ env.NEON_CSS }}
 
-      # ---------------------------------------------------------------
-      # 2) Isometric contribution calendar
-      #    -> feeds CENTER "Code Flux Calendar"
-      # ---------------------------------------------------------------
+
+      # ===============================================================
+      # 4) ISOMETRIC CONTRIBUTION CALENDAR
+      # ===============================================================
+
       - name: Generate isometric contribution calendar
         uses: lowlighter/metrics@latest
         with:
@@ -79,10 +107,11 @@ jobs:
           config_timezone: ${{ vars.METRICS_TIMEZONE || 'Asia/Kolkata' }}
           extras_css: ${{ env.NEON_CSS }}
 
-      # ---------------------------------------------------------------
-      # 3) Coding habits (commit activity by day / hour)
-      #    -> feeds CENTER "Activity Pulse" bar charts
-      # ---------------------------------------------------------------
+
+      # ===============================================================
+      # 5) CODING HABITS
+      # ===============================================================
+
       - name: Generate coding habits panel
         uses: lowlighter/metrics@latest
         with:
@@ -99,10 +128,11 @@ jobs:
           config_timezone: ${{ vars.METRICS_TIMEZONE || 'Asia/Kolkata' }}
           extras_css: ${{ env.NEON_CSS }}
 
-      # ---------------------------------------------------------------
-      # 4) Most-used languages across owned repositories
-      #    -> feeds RIGHT COLUMN "Top languages (in depth)"
-      # ---------------------------------------------------------------
+
+      # ===============================================================
+      # 6) LANGUAGES IN DEPTH
+      # ===============================================================
+
       - name: Generate languages panel
         uses: lowlighter/metrics@latest
         with:
@@ -117,13 +147,11 @@ jobs:
           plugin_languages_threshold: 2%
           extras_css: ${{ env.NEON_CSS }}
 
-      # ---------------------------------------------------------------
-      # 5) Project spotlight -- your real pinned repositories
-      #    -> feeds CENTER "Project Spotlight"
-      #    Uses whatever you've pinned on your GitHub profile. Nothing
-      #    here is hardcoded; if you have no repos pinned, pin some at
-      #    github.com/Navin-J48 -> "Customize your pins".
-      # ---------------------------------------------------------------
+
+      # ===============================================================
+      # 7) PROJECT SPOTLIGHT
+      # ===============================================================
+
       - name: Generate project spotlight panel
         uses: lowlighter/metrics@latest
         with:
@@ -135,3 +163,21 @@ jobs:
           plugin_repositories: yes
           plugin_repositories_pinned: 3
           extras_css: ${{ env.NEON_CSS }}
+
+
+      # ===============================================================
+      # 8) COMMIT GENERATED STATS CARDS
+      # ===============================================================
+
+      - name: Commit generated stats cards
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add dashboard-account.svg
+          git add dashboard-top-languages.svg
+
+          git commit -m "Update GitHub stats cards" || exit 0
+          git push
+
+        
