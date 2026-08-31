@@ -91,8 +91,7 @@ Currently shipping, always learning.
 <!-- STATISTICS -->
 #### `> account_overview`
 
-<img src="https://github-readme-stats.vercel.app/api?username=Navin-J48&show_icons=true&hide_border=true&theme=dark&bg_color=0a0e14&title_color=39ff9c&icon_color=00e5ff&text_color=c9d1d9&hide=contribs" width="100%" alt="Repositories, stars, commits, PRs, issues"/>
-
+<img src="./dashboard-account.svg" width="100%" alt="Repositories, stars, commits, PRs, issues"/>
 <img src="./assets/divider.svg" width="100%" alt=""/>
 
 #### `> streak`
@@ -103,8 +102,7 @@ Currently shipping, always learning.
 
 #### `> top_languages`
 
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Navin-J48&layout=compact&hide_border=true&theme=dark&bg_color=0a0e14&title_color=39ff9c&text_color=c9d1d9" width="100%" alt="Most used languages by bytes"/>
-
+<img src="./dashboard-top-languages.svg" width="100%" alt="Most used languages by bytes"/>
 <img src="./assets/divider.svg" width="100%" alt=""/>
 
 #### `> languages_(in_depth)`
